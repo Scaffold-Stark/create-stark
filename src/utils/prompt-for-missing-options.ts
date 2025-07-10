@@ -1,11 +1,13 @@
 import { Options, RawOptions } from "../types";
 import inquirer from "inquirer";
+import { loadExtensions } from "./load-extensions";
 
 // default values for unspecified args
 const defaultOptions: RawOptions = {
   directory: "./my-dapp-example",
   install: true,
   dev: false,
+  extension: null,
 };
 
 export async function promptForMissingOptions(
@@ -15,6 +17,12 @@ export async function promptForMissingOptions(
     Object.entries(options).filter(([key, value]) => value !== null),
   );
 
+  const extensions = loadExtensions();
+  const extensionChoices = extensions.map(ext => ({
+    name: `${ext.extensionFlagValue} - ${ext.description}`,
+    value: ext.extensionFlagValue,
+  }));
+
   const questions = [
     {
       type: "input",
@@ -23,6 +31,15 @@ export async function promptForMissingOptions(
         "Where do you want to install the new files? Choose ./ (root folder) or provide a new folder name.",
       default: defaultOptions.directory,
       validate: (value: string) => value.length > 0,
+    },
+    {
+      type: "list",
+      name: "extension",
+      message: "Which extension would you like to use?",
+      choices: [
+        ...extensionChoices,
+      ],
+      default: "",
     },
     {
       type: "confirm",
@@ -38,6 +55,7 @@ export async function promptForMissingOptions(
     directory: options.directory ?? answers.directory,
     install: options.install ?? answers.install,
     dev: options.dev ?? defaultOptions.dev,
+    extension: options.extension ?? answers.extension,
   };
 
   return mergedOptions;

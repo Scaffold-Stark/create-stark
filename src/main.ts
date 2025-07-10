@@ -11,6 +11,7 @@ import chalk from "chalk";
 import Listr from "listr";
 import path from "path";
 import { fileURLToPath } from "url";
+import { copyExtensionFile } from "./tasks/copy-extension-file";
 
 export async function createProject(options: Options) {
   console.log(`\n`);
@@ -59,6 +60,18 @@ export async function createProject(options: Options) {
       task: () => createFirstGitCommit(targetDirectory),
     },
   ]);
+  
+  if (options.extension) {
+    tasks.add({
+      title: `🚀 Creating extension ${chalk.green.bold(
+        options.extension,
+      )}`,
+      task: () =>
+      {
+        copyExtensionFile(options.extension, targetDirectory);
+      }
+    });
+  }
 
   try {
     await tasks.run();

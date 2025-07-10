@@ -12,6 +12,9 @@ export function parseArgumentsIntoOptions(rawArgs: Args): RawOptions {
 
       "--dir": String,
       "-d": "--dir",
+
+      "--extension": String,
+      "-e": "--extension",
     },
     {
       argv: rawArgs.slice(2).map((a) => a.toLowerCase()),
@@ -24,9 +27,12 @@ export function parseArgumentsIntoOptions(rawArgs: Args): RawOptions {
 
   const directory = args["--dir"] ?? null;
 
+  const extension = args["--extension"] ?? null;
+
   return {
     directory,
     install: skipInstall ? false : null,
     dev,
+    extension,
   };
 }
