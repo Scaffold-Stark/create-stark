@@ -1,40 +1,24 @@
 import path from "path";
 import fs from "fs";
-import chalk from "chalk";
 import { execa } from "execa";
 import { findExtensionByFlag } from "../utils/load-extensions";
 import type { Extension } from "../types";
 
-const prettyLog = {
-  info: (message: string, indent = 0) => console.log(chalk.cyan(`${"  ".repeat(indent)}${message}`)),
-  success: (message: string, indent = 0) => console.log(chalk.green(`${"  ".repeat(indent)}✔︎ ${message}`)),
-  warning: (message: string, indent = 0) => console.log(chalk.yellow(`${"  ".repeat(indent)}⚠ ${message}`)),
-  error: (message: string, indent = 0) => console.log(chalk.red(`${"  ".repeat(indent)}✖ ${message}`)),
-};
-
 export async function copyExtensionFile(extensionName: string, targetDirectory: string) {
 
   if (!extensionName || extensionName.trim() === "") {
-    prettyLog.info("No extension specified, skipping extension installation");
     return;
   }
 
   const extensionConfig = findExtensionByFlag(extensionName);
 
   if (!extensionConfig) {
-    prettyLog.error(`Extension '${extensionName}' not found in extensions.json`);
     return;
   }
-
-  prettyLog.info(`Installing extension: ${extensionName}`);
-  prettyLog.info(`Description: ${extensionConfig.description}`);
-  prettyLog.info(`Repository: ${extensionConfig.repository}`);
-  prettyLog.info(`Branch: ${extensionConfig.branch}`);
 
   const targetPackagesDir = path.join(targetDirectory, "packages");
   
   if (!fs.existsSync(targetPackagesDir)) {
-    prettyLog.error(`Target packages directory not found: ${targetPackagesDir}`);
     return;
   }
 
@@ -42,7 +26,6 @@ export async function copyExtensionFile(extensionName: string, targetDirectory: 
     const tempDir = path.join(targetDirectory, ".temp-extension");
     fs.mkdirSync(tempDir, { recursive: true });
 
-    prettyLog.info("Cloning extension repository...");
     await cloneExtensionRepository(extensionConfig, tempDir);
 
     await copyExtensionFiles(tempDir, targetPackagesDir, extensionConfig.extensionFlagValue);
@@ -53,9 +36,7 @@ export async function copyExtensionFile(extensionName: string, targetDirectory: 
 
     fs.rmSync(tempDir, { recursive: true, force: true });
 
-    prettyLog.success(`Successfully installed extension '${extensionConfig.extensionFlagValue}' into ${targetPackagesDir}`);
   } catch (error) {
-    prettyLog.error(`Failed to install extension: ${error}`);
     throw error;
   }
 }
@@ -71,13 +52,7 @@ async function cloneExtensionRepository(extension: Extension, tempDir: string) {
       tempDir
     ]);
 
-    if (stderr && !stderr.includes("Cloning into")) {
-      prettyLog.warning(`Git clone warnings: ${stderr}`);
-    }
-
-    prettyLog.success("Repository cloned successfully");
   } catch (error) {
-    prettyLog.error(`Failed to clone repository: ${error}`);
     throw error;
   }
 }
@@ -92,7 +67,6 @@ async function copyExtensionFiles(tempDir: string, targetPackagesDir: string, ex
   if (fs.existsSync(extensionPackageDir)) {
     const targetExtensionDir = path.join(targetPackagesDir, extensionName);
     copyDirectoryRecursive(extensionPackageDir, targetExtensionDir);
-    prettyLog.info(`Copied extension package: ${extensionName}`);
   }
   
   let extensionPackagesDir = path.join(tempDir, "packages");
@@ -114,10 +88,8 @@ async function copyExtensionFiles(tempDir: string, targetPackagesDir: string, ex
       
       if (fs.existsSync(targetPackageDir)) {
         mergeDirectoryRecursive(sourcePackageDir, targetPackageDir);
-        prettyLog.info(`Merged extension files into existing package: ${packageName}`);
       } else {
         copyDirectoryRecursive(sourcePackageDir, targetPackageDir);
-        prettyLog.info(`Copied new package: ${packageName}`);
       }
     }
   }
@@ -146,7 +118,6 @@ async function mergePackageJsonFiles(tempDir: string, targetPackagesDir: string,
       
       if (fs.existsSync(sourcePackageJsonPath) && fs.existsSync(targetPackageJsonPath)) {
         mergePackageJson(sourcePackageJsonPath, targetPackageJsonPath);
-        prettyLog.info(`Merged package.json for: ${packageName}`);
       }
     }
   }
@@ -168,7 +139,6 @@ async function mergeRootPackageJson(tempDir: string, targetDirectory: string, ex
   if (fs.existsSync(targetRootPackageJsonPath)) {
     mergePackageJson(extensionRootPackageJsonPath, targetRootPackageJsonPath);
     addPackageToWorkspaces(targetRootPackageJsonPath, extensionName);
-    prettyLog.info(`Merged root package.json with extension scripts and workspace`);
   }
 }
 
@@ -196,7 +166,7 @@ function mergePackageJson(sourcePath: string, targetPath: string) {
     fs.writeFileSync(targetPath, JSON.stringify(targetPackageJson, null, 2));
     
   } catch (error) {
-    prettyLog.error(`Failed to merge package.json: ${error}`);
+    // Error handling without logging
   }
 }
 
@@ -209,11 +179,10 @@ function addPackageToWorkspaces(packageJsonPath: string, packageName: string) {
       if (!packageJson.workspaces.packages.includes(workspacePath)) {
         packageJson.workspaces.packages.push(workspacePath);
         fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
-        prettyLog.info(`Added ${packageName} to workspaces`);
       }
     }
   } catch (error) {
-    prettyLog.error(`Failed to add package to workspaces: ${error}`);
+    // Error handling without logging
   }
 }
 
