@@ -38,6 +38,18 @@ export async function createProject(options: Options) {
         copyTemplateFiles(options, templateDirectory, targetDirectory),
     },
     {
+      title: `📡 Initializing Git repository`,
+      task: () => createFirstGitCommit(targetDirectory),
+    },
+    ...(options.extension ? [{
+      title: `🚀 Creating extension ${chalk.green.bold(
+        options.extension,
+      )}`,
+      task: () => {
+        copyExtensionFile(options.extension, targetDirectory);
+      }
+    }] : []),
+    {
       title: `📦 Installing dependencies with yarn, this could take a while`,
       task: () => installPackages(targetDirectory, options),
       skip: () => {
@@ -55,23 +67,7 @@ export async function createProject(options: Options) {
         }
       },
     },
-    {
-      title: `📡 Initializing Git repository`,
-      task: () => createFirstGitCommit(targetDirectory),
-    },
   ]);
-  
-  if (options.extension) {
-    tasks.add({
-      title: `🚀 Creating extension ${chalk.green.bold(
-        options.extension,
-      )}`,
-      task: () =>
-      {
-        copyExtensionFile(options.extension, targetDirectory);
-      }
-    });
-  }
 
   try {
     await tasks.run();
