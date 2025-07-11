@@ -1,19 +1,10 @@
-import fs from "fs";
-import path from "path";
 import type { Extension } from "../types";
+import extensions from "../extensions.json";
 
 export function loadExtensions(): Extension[] {
-  try {
-    const extensionsPath = path.join(process.cwd(), "src", "extensions.json");
-    const extensionsData = fs.readFileSync(extensionsPath, "utf8");
-    return JSON.parse(extensionsData);
-  } catch (error) {
-    console.error("Failed to load extensions:", error);
-    return [];
-  }
+  return extensions as Extension[];
 }
 
 export function findExtensionByFlag(flagValue: string): Extension | undefined {
-  const extensions = loadExtensions();
-  return extensions.find(ext => ext.extensionFlagValue === flagValue);
+  return extensions.find((ext: Extension) => ext.extensionFlagValue === flagValue);
 } 

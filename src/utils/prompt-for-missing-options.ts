@@ -33,15 +33,6 @@ export async function promptForMissingOptions(
       validate: (value: string) => value.length > 0,
     },
     {
-      type: "list",
-      name: "extension",
-      message: "Which extension would you like to use?",
-      choices: [
-        ...extensionChoices,
-      ],
-      default: "",
-    },
-    {
       type: "confirm",
       name: "install",
       message: "Install dependencies?",
