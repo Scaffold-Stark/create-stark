@@ -42,17 +42,6 @@ export async function createProject(options: Options) {
       task: () => createFirstGitCommit(targetDirectory),
     },
     {
-      title: `🚀 Creating extension ${chalk.green.bold(
-        options.extension,
-      )}`,
-      task: () => copyExtensionFile(options.extension, targetDirectory),
-      skip: () => {
-        if (!options.extension) {
-          return "Skipping because extension was not provided";
-        }
-      },
-    },
-    {
       title: `📦 Installing dependencies with yarn, this could take a while`,
       task: () => installPackages(targetDirectory, options),
       skip: () => {

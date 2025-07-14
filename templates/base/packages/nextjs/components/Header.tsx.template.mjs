@@ -34,7 +34,11 @@ export const menuLinks: HeaderMenuLink[] = [
     href: "/debug",
     icon: <BugAntIcon className="h-4 w-4" />,
   },
-  ...${JSON.stringify(extraMenuLinksObjects)},
+  ${extraMenuLinksObjects.map(link => `{
+    label: "${link.label}",
+    href: "${link.href}",
+    ${link.icon ? `icon: ${link.icon.replace(/^\$\$|\$\$$/g, '')},` : ''}
+  }`).join(',\n  ')},
 ];
 
 export const HeaderMenuLinks = () => {
