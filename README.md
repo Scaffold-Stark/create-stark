@@ -1,5 +1,4 @@
 > ⚠️ Under active development.
->
 
 # 🏗 create-stark
 
@@ -62,6 +61,14 @@ Visit your app on: `http://localhost:3000`. You can interact with your smart con
 - Edit your smart contract `YourContract.cairo` in `packages/snfoundry/contracts/src`
 - Edit your frontend homepage at `packages/nextjs/app/page.tsx`. For guidance on [routing](https://nextjs.org/docs/app/building-your-application/routing/defining-routes) and configuring [pages/layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts) checkout the Next.js documentation.
 - Edit your deployment scripts in `packages/snfoundry/scripts-ts`
+
+## Extensions
+
+Now you can choose from some preset extensions to ship your dApp faster! You can embed the Auco indexer during the scaffold-stark creation by running the following commands:
+
+```bash
+npx create-stark@latest --extension auco
+```
 
 ## Documentation
 

@@ -11,6 +11,7 @@ import chalk from "chalk";
 import Listr from "listr";
 import path from "path";
 import { fileURLToPath } from "url";
+import { copyExtensionFile } from "./tasks/copy-extension-file";
 
 export async function createProject(options: Options) {
   console.log(`\n`);
@@ -37,6 +38,10 @@ export async function createProject(options: Options) {
         copyTemplateFiles(options, templateDirectory, targetDirectory),
     },
     {
+      title: `📡 Initializing Git repository`,
+      task: () => createFirstGitCommit(targetDirectory),
+    },
+    {
       title: `📦 Installing dependencies with yarn, this could take a while`,
       task: () => installPackages(targetDirectory, options),
       skip: () => {
@@ -53,10 +58,6 @@ export async function createProject(options: Options) {
           return "Skipping because prettier install was skipped";
         }
       },
-    },
-    {
-      title: `📡 Initializing Git repository`,
-      task: () => createFirstGitCommit(targetDirectory),
     },
   ]);
 

@@ -9,6 +9,7 @@ import ncp from "ncp";
 import path from "path";
 import { promisify } from "util";
 import link from "../utils/link";
+import { copyExtensionFile } from "./copy-extension-file";
 
 const copy = promisify(ncp);
 let copyOrLink = copy;
@@ -44,7 +45,7 @@ const copyBaseFiles = async (
       // Check if file matches any exclude pattern
       const isExcluded = excludePatterns.some(pattern => pattern.test(fileName));
 
-      const skipAlways = isTemplate || isPackageJson || isGitKeep || isExcluded;
+      const skipAlways = isPackageJson || isGitKeep || isExcluded;
       const skipDevOnly = isYarnLock || isNextGenerated;
       const shouldSkip = skipAlways || (isDev && skipDevOnly);
 
@@ -92,8 +93,10 @@ const copyBaseFiles = async (
   }
 };
 
+
+
 const processTemplatedFiles = async (
-  { dev: isDev }: Options,
+  { dev: isDev, extension }: Options,
   basePath: string,
   targetDir: string
 ) => {
@@ -117,7 +120,7 @@ const processTemplatedFiles = async (
         `${templateTargetName}.args.`
       );
 
-      // Without extensions, we can directly load the template
+      // Load the template
       const template = (await import(templateFileDescriptor.fileUrl)).default;
 
       if (!template) {
@@ -131,8 +134,36 @@ const processTemplatedFiles = async (
         );
       }
 
-      // Execute template with empty args
-      const output = template({});
+      // Collect args from multiple sources
+      const argsFileUrls = [];
+
+      // Check for args in target directory (from extensions)
+      if (extension) {
+        const extensionArgsPath = path.join(targetDir, argsPath);
+        if (fs.existsSync(extensionArgsPath)) {
+          argsFileUrls.push(url.pathToFileURL(extensionArgsPath).href);
+        }
+      }
+
+      // Load and combine all args
+      const argsModules = await Promise.all(
+        argsFileUrls.map(async (argsFileUrl) => {
+          try {
+            return await import(argsFileUrl) as Record<string, any>;
+          } catch (error) {
+            console.warn(`Failed to load args from: ${argsFileUrl}`);
+            return {};
+          }
+        })
+      );
+
+      // Combine all args into a single object
+      const combinedArgs = argsModules.reduce((acc, module) => {
+        return { ...acc, ...module };
+      }, {});
+
+      // Execute template with combined args
+      const output = template(combinedArgs);
 
       const targetPath = path.join(
         targetDir,
@@ -147,11 +178,17 @@ templates/${templateFileDescriptor.source}${templateFileDescriptor.relativePath}
 
 
 --- ARGS FILES
-(no args files writing to the template)
+${argsFileUrls.length > 0 
+  ? argsFileUrls.map(url => `\t- ${url.split("packages")[1] || url}`).join("\n")
+  : "(no args files writing to the template)"}
 
 
 --- RESULTING ARGS
-(no args sent for the template)
+${Object.keys(combinedArgs).length > 0
+  ? Object.entries(combinedArgs)
+      .map(([key, value]) => `\t- ${key}:\t${JSON.stringify(value)}`)
+      .join("\n")
+  : "(no args sent for the template)"}
 `;
         fs.writeFileSync(`${targetPath}.dev`, devOutput);
       }
@@ -170,10 +207,46 @@ export async function copyTemplateFiles(
   // 1. Copy base template to target directory
   await copyBaseFiles(options, basePath, targetDir);
 
-  // 2. Process templated files and generate output
+  // 2. Copy extension files if extension is provided
+  if (options.extension) {
+    await copyExtensionFile(options.extension, targetDir);
+  }
+
+  // 3. Process templated files with extension args
   await processTemplatedFiles(options, basePath, targetDir);
 
-  // 3. Initialize git repo to avoid husky error
+  // 4. Clean up template and args files
+  await cleanupTemplateFiles(targetDir);
+
+  // 5. Initialize git repo to avoid husky error
   await execa("git", ["init"], { cwd: targetDir });
   await execa("git", ["checkout", "-b", "main"], { cwd: targetDir });
 }
+
+async function cleanupTemplateFiles(targetDir: string) {
+  const basePath = path.join(targetDir, "packages");
+  
+  // Find all template and args files
+  const templateFiles = findFilesRecursiveSync(basePath, (path: string) => isTemplateRegex.test(path));
+  const argsFiles = findFilesRecursiveSync(basePath, (path: string) => isArgsRegex.test(path));
+  
+  // Delete template files
+  templateFiles.forEach((templatePath) => {
+    try {
+      fs.unlinkSync(templatePath);
+    } catch (error) {
+      console.warn(`Failed to delete template file: ${templatePath}`);
+    }
+  });
+  
+  // Delete args files
+  argsFiles.forEach((argsPath) => {
+    try {
+      fs.unlinkSync(argsPath);
+    } catch (error) {
+      console.warn(`Failed to delete args file: ${argsPath}`);
+    }
+  });
+}
+
+

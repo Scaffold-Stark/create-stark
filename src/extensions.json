@@ -1,0 +1,8 @@
+[
+    {
+      "extensionFlagValue": "auco",
+      "description": "This Scaffold-Stark 2 extension comes pre-configured with auco, providing an example to help you get started quickly.",
+      "repository": "https://github.com/Scaffold-Stark/create-starknet-extensions",
+      "branch": "auco"
+    }
+]

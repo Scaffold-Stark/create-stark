@@ -4,6 +4,7 @@ export type RawOptions = {
   directory: string | null;
   install: boolean | null;
   dev: boolean;
+  extension: string | null;
 };
 
 type NonNullableRawOptions = {
@@ -20,4 +21,11 @@ export type TemplateDescriptor = {
   fileUrl: string;
   relativePath: string;
   source: string;
+};
+
+export type Extension = {
+  extensionFlagValue: string;
+  description: string;
+  repository: string;
+  branch: string;
 };
