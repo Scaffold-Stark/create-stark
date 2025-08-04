@@ -1,5 +1,3 @@
-> ⚠️ Under active development.
-
 # 🏗 create-stark
 
 CLI to create decentralized applications (dapps) using Scaffold-Stark.

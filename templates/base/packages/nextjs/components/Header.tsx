@@ -1,7 +1,4 @@
-const contents = (args) => {
-  const { preContent = "", extraMenuLinksObjects = [] } = args;
-  
-  return `"use client";
+"use client";
 
 import React, { useCallback, useRef, useState, useEffect } from "react";
 import Image from "next/image";
@@ -16,7 +13,6 @@ import { devnet } from "@starknet-react/chains";
 import { SwitchTheme } from "./SwitchTheme";
 import { useAccount, useNetwork, useProvider } from "@starknet-react/core";
 import { BlockIdentifier } from "starknet";
-${preContent}
 
 type HeaderMenuLink = {
   label: string;
@@ -34,11 +30,6 @@ export const menuLinks: HeaderMenuLink[] = [
     href: "/debug",
     icon: <BugAntIcon className="h-4 w-4" />,
   },
-  ${extraMenuLinksObjects.map(link => `{
-    label: "${link.label}",
-    href: "${link.href}",
-    ${link.icon ? `icon: ${link.icon.replace(/^\$\$|\$\$$/g, '')},` : ''}
-  }`).join(',\n  ')},
 ];
 
 export const HeaderMenuLinks = () => {
@@ -58,11 +49,11 @@ export const HeaderMenuLinks = () => {
             <Link
               href={href}
               passHref
-              className={\`\${
+              className={`${
                 isActive
                   ? "!bg-gradient-nav !text-white active:bg-gradient-nav shadow-md"
                   : ""
-              } py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col hover:bg-gradient-nav hover:text-white\`}
+              } py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col hover:bg-gradient-nav hover:text-white`}
             >
               {icon}
               <span>{label}</span>
@@ -130,11 +121,11 @@ export const Header = () => {
         <div className="lg:hidden dropdown" ref={burgerMenuRef}>
           <label
             tabIndex={0}
-            className={\`ml-1 btn btn-ghost 
+            className={`ml-1 btn btn-ghost 
               [@media(max-width:379px)]:!px-3 [@media(max-width:379px)]:!py-1 
               [@media(max-width:379px)]:!h-9 [@media(max-width:379px)]:!min-h-0
               [@media(max-width:379px)]:!w-10
-              \${isDrawerOpen ? "hover:bg-secondary" : "hover:bg-transparent"}\`}
+              ${isDrawerOpen ? "hover:bg-secondary" : "hover:bg-transparent"}`}
             onClick={() => {
               setIsDrawerOpen((prevIsOpenState) => !prevIsOpenState);
             }}
@@ -184,14 +175,11 @@ export const Header = () => {
         <CustomConnectButton />
         {/* <FaucetButton /> */}
         <SwitchTheme
-          className={\`pointer-events-auto \${
+          className={`pointer-events-auto ${
             isLocalNetwork ? "mb-1 lg:mb-0" : ""
-          }\`}
+          }`}
         />
       </div>
     </div>
   );
-};`;
 };
-
-export default contents; 
