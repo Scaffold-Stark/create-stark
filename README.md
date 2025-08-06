@@ -62,11 +62,13 @@ Visit your app on: `http://localhost:3000`. You can interact with your smart con
 
 ## Extensions
 
-Now you can choose from some preset extensions to ship your dApp faster! You can embed the Auco indexer during the scaffold-stark creation by running the following commands:
+Now you can choose from some preset extensions to ship your dApp faster! You can embed available extensions during the scaffold-stark creation by running the following commands:
 
 ```bash
-npx create-stark@latest --extension auco
+npx create-stark@latest --extension <YOUR_EXTENSION_HERE>
 ```
+
+You can find more extensions [here](https://scaffoldstark.com/extensions).
 
 ## Documentation
 

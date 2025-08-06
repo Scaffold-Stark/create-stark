@@ -13,6 +13,9 @@ package-lock.json
 !.yarn/versions
 .eslintcache
 .DS_Store
-.vercel`
+.vercel
+
+**/.env*
+!**/.env.example`
 
 export default contents;
