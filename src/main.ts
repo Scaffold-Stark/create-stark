@@ -31,15 +31,13 @@ export async function createProject(options: Options) {
       task: () => createProjectDirectory(options.directory),
     },
     {
-      title: `🚀 Creating a new Scaffold-Stark 2 app in ${chalk.green.bold(
-        options.directory,
-      )}`,
+      title: `🚀 Creating a new Scaffold-Stark 2 app${
+        options.extension
+          ? ` with ${chalk.green.bold(options.extension)} extension`
+          : ""
+      } in ${chalk.green.bold(options.directory)}`,
       task: () =>
         copyTemplateFiles(options, templateDirectory, targetDirectory),
-    },
-    {
-      title: `📡 Initializing Git repository`,
-      task: () => createFirstGitCommit(targetDirectory),
     },
     {
       title: `📦 Installing dependencies with yarn, this could take a while`,
@@ -58,6 +56,10 @@ export async function createProject(options: Options) {
           return "Skipping because prettier install was skipped";
         }
       },
+    },
+    {
+      title: `📡 Initializing Git repository`,
+      task: () => createFirstGitCommit(targetDirectory),
     },
   ]);
 
