@@ -42,6 +42,8 @@ export async function copyExtensionFile(extensionName: string, targetDirectory: 
 }
 
 async function cloneExtensionRepository(extension: Extension, tempDir: string) {
+  const targetDir =
+    extension.repository === "https://github.com/Scaffold-Stark/speedrunstark" ? path.join(tempDir, "extensions") : tempDir;
   try {
     const { stdout, stderr } = await execa("git", [
       "clone",
@@ -49,7 +51,7 @@ async function cloneExtensionRepository(extension: Extension, tempDir: string) {
       "--single-branch",
       "--depth", "1",
       extension.repository,
-      tempDir
+      targetDir
     ]);
 
   } catch (error) {

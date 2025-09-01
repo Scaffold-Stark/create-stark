@@ -11,7 +11,6 @@ import chalk from "chalk";
 import Listr from "listr";
 import path from "path";
 import { fileURLToPath } from "url";
-import { copyExtensionFile } from "./tasks/copy-extension-file";
 
 export async function createProject(options: Options) {
   console.log(`\n`);
