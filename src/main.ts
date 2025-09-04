@@ -11,7 +11,6 @@ import chalk from "chalk";
 import { Listr, ListrContext } from "listr2";
 import path from "path";
 import { fileURLToPath } from "url";
-import { copyExtensionFile } from "./tasks/copy-extension-file";
 
 type CreateStarkListrContext = Options & ListrContext;
 

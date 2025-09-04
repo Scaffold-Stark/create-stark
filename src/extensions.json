@@ -1,8 +1,44 @@
 [
-    {
-      "extensionFlagValue": "auco",
-      "description": "This Scaffold-Stark 2 extension comes pre-configured with auco, providing an example to help you get started quickly.",
-      "repository": "https://github.com/Scaffold-Stark/create-starknet-extensions",
-      "branch": "auco"
-    }
+  {
+    "extensionFlagValue": "auco",
+    "description": "This Scaffold-Stark 2 extension comes pre-configured with auco, providing an example to help you get started quickly.",
+    "repository": "https://github.com/Scaffold-Stark/create-starknet-extensions",
+    "branch": "auco"
+  },
+  {
+    "extensionFlagValue": "challenge-0-simple-nft",
+    "description": "Challenge 0: Simple NFT",
+    "repository": "https://github.com/Scaffold-Stark/speedrunstark",
+    "branch": "challenge-0-simple-nft"
+  },
+  {
+    "extensionFlagValue": "challenge-1-decentralized-staking",
+    "description": "Challenge 1: Decentralized Staking",
+    "repository": "https://github.com/Scaffold-Stark/speedrunstark",
+    "branch": "challenge-1-decentralized-staking"
+  },
+  {
+    "extensionFlagValue": "challenge-2-token-vendor",
+    "description": "Challenge 2: Token Vendor",
+    "repository": "https://github.com/Scaffold-Stark/speedrunstark",
+    "branch": "challenge-2-token-vendor"
+  },
+  {
+    "extensionFlagValue": "challenge-3-dice-game",
+    "description": "Challenge 3: Dice Game",
+    "repository": "https://github.com/Scaffold-Stark/speedrunstark",
+    "branch": "challenge-3-dice-game"
+  },
+  {
+    "extensionFlagValue": "challenge-4-build-a-dex",
+    "description": "Challenge 4: Build a DEX",
+    "repository": "https://github.com/Scaffold-Stark/speedrunstark",
+    "branch": "challenge-4-build-a-dex"
+  },
+  {
+    "extensionFlagValue": "challenge-5-multisig-wallet",
+    "description": "Challenge 5: Multisig Wallet",
+    "repository": "https://github.com/Scaffold-Stark/speedrunstark",
+    "branch": "challenge-5-multisig-wallet"
+  }
 ]
