@@ -1,6 +1,6 @@
 {
   "name": "ss-2",
-  "version": "1.1.1",
+  "version": "1.1.2-0",
   "author": "Q3 Labs",
   "license": "MIT",
   "private": true,
@@ -10,7 +10,7 @@
       "packages/nextjs"
     ]
   },
-    "overrides": {
+  "overrides": {
     "chalk": "5.3.0",
     "strip-ansi": "7.1.0",
     "color-convert": "2.0.1",
