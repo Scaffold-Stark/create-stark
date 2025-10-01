@@ -6,6 +6,12 @@
     "branch": "auco"
   },
   {
+    "extensionFlagValue": "erc-20",
+    "description": "Adds support for ERC-20 token contracts, including balance checks and token transfers.",
+    "repository": "https://github.com/Scaffold-Stark/create-starknet-extensions",
+    "branch": "erc-20"
+  },
+  {
     "extensionFlagValue": "challenge-0-simple-nft",
     "description": "Challenge 0: Simple NFT",
     "repository": "https://github.com/Scaffold-Stark/speedrunstark",
