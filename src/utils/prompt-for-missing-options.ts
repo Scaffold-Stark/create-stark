@@ -32,12 +32,6 @@ export async function promptForMissingOptions(
       default: defaultOptions.directory,
       validate: (value: string) => value.length > 0,
     },
-    {
-      type: "confirm",
-      name: "install",
-      message: "Install dependencies?",
-      default: defaultOptions.install,
-    },
   ];
 
   const answers = await inquirer.prompt(questions, cliAnswers);

@@ -31,7 +31,7 @@ export function parseArgumentsIntoOptions(rawArgs: Args): RawOptions {
 
   return {
     directory,
-    install: skipInstall ? false : null,
+    install: skipInstall ? false : true,
     dev,
     extension,
   };
