@@ -12,6 +12,12 @@
     "branch": "erc-20"
   },
   {
+    "extensionFlagValue": "erc-721",
+    "description": "Adds support for ERC-721 NFT contracts, including supply, balance, listing, and transfer features.",
+    "repository": "https://github.com/Scaffold-Stark/create-starknet-extensions",
+    "branch": "erc-721"
+  },
+  {
     "extensionFlagValue": "challenge-0-simple-nft",
     "description": "Challenge 0: Simple NFT",
     "repository": "https://github.com/Scaffold-Stark/speedrunstark",
