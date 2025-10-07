@@ -18,6 +18,12 @@
     "branch": "erc-721"
   },
   {
+    "extensionFlagValue": "erc-1155",
+    "description": "This extension introduces an ERC-1155 token contract and demonstrates how to use it, including multi-token contract with game items including Gold, Silver, Thor's Hammer, Sword, and Shield. Each item has different properties and can be minted and transferred.",
+    "repository": "https://github.com/Scaffold-Stark/create-starknet-extensions",
+    "branch": "erc-1155"
+  },
+  {
     "extensionFlagValue": "challenge-0-simple-nft",
     "description": "Challenge 0: Simple NFT",
     "repository": "https://github.com/Scaffold-Stark/speedrunstark",
