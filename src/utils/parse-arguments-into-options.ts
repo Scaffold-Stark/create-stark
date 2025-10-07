@@ -28,8 +28,10 @@ export function parseArgumentsIntoOptions(rawArgs: Args): RawOptions {
   const skipInstallFlag = args["--skip-install"] ?? null;
 
   // - If both or neither: null
-  const install =
-    installFlag === skipInstallFlag ? null : installFlag ? true : false;
+  const install = (() => {
+    if (installFlag === skipInstallFlag) return null;
+    return installFlag ? true : false;
+  })();
 
   const dev = args["--dev"] ?? false; // info: use false avoid asking user
 
