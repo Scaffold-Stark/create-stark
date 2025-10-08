@@ -5,6 +5,9 @@ import arg from "arg";
 export function parseArgumentsIntoOptions(rawArgs: Args): RawOptions {
   const args = arg(
     {
+      "--install": Boolean,
+      "-i": "--install",
+
       "--skip-install": Boolean,
       "-s": "--skip-install",
 
@@ -21,7 +24,14 @@ export function parseArgumentsIntoOptions(rawArgs: Args): RawOptions {
     },
   );
 
-  const skipInstall = args["--skip-install"] ?? null;
+  const installFlag = args["--install"] ?? null;
+  const skipInstallFlag = args["--skip-install"] ?? null;
+
+  // - If both or neither: null
+  const install = (() => {
+    if (installFlag === skipInstallFlag) return null;
+    return installFlag ? true : false;
+  })();
 
   const dev = args["--dev"] ?? false; // info: use false avoid asking user
 
@@ -31,7 +41,7 @@ export function parseArgumentsIntoOptions(rawArgs: Args): RawOptions {
 
   return {
     directory,
-    install: skipInstall ? false : null,
+    install,
     dev,
     extension,
   };
