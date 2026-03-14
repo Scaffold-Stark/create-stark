@@ -1,5 +1,4 @@
-const contents = () => 
-`.vscode/**
+.vscode/**
 node_modules
 package-lock.json
 .idea
@@ -16,6 +15,4 @@ package-lock.json
 .vercel
 
 **/.env*
-!**/.env.example`
-
-export default contents;
+!**/.env.example
